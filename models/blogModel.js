@@ -16,7 +16,6 @@ var blogSchema = new mongoose.Schema({
     category:{
         type:String,
         required:true,
-        unique:true,
     },
     numViews:{
         type:Number,
@@ -26,7 +25,7 @@ var blogSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    isDisLike: {
+    isDisLiked: {
         type: Boolean,
         default: false,
     },
@@ -38,10 +37,7 @@ var blogSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     }],
-    image: {
-        type:String,
-        default: "https://thumbs.dreamstime.com/z/blog-21031296.jpg"
-    },
+    images: [],
     author: {
         type: String,
         default: "Admin",
@@ -57,4 +53,4 @@ var blogSchema = new mongoose.Schema({
 });
 
 //Export the model
-module.exports = mongoose.model('Blog', userSchema);
+module.exports = mongoose.model('Blog', blogSchema);
