@@ -32,7 +32,7 @@ router.post('/forgot-password-token', forgotPasswordToken);
 router.put('/reset-password/:token', resetPassword);
 router.put('/order/update-order/:id',authMiddleware, isAdmin, updateOrderStatus);
 router.put('/password', authMiddleware, updatePassword);
-router.post('/login', loginUserCtrl);+
+router.post('/login', loginUserCtrl);
 router.post('/loginAdmin', loginAdmin);
 router.post('/cart', authMiddleware, userCart);
 router.post('/cart/applycoupon', authMiddleware, applyCoupon);
@@ -43,7 +43,7 @@ router.get('/refresh',handlerRefreshToken);
 router.get('/logout', logout)
 router.get('/wishlist', authMiddleware, getWishList);
 router.get('/cart', authMiddleware, getUserCart);
-router.get('/:id', authMiddleware, isAdmin, getAUser);
+router.get('/:id', authMiddleware, getAUser);
 router.delete('/empty-cart',authMiddleware, emptyCart);
 router.delete('/:id',authMiddleware, isAdmin, deleteAUser);
 router.put('/edit-user',authMiddleware, updateAUser);

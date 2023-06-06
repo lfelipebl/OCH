@@ -27,7 +27,8 @@ const createUser = asyncHandler(async (req,res) => {
     }
     else {
         // User already exists
-       throw new Error('Ya existe el usuario');
+       return res.sendStatus(409);
+       //throw new Error('Ya existe el usuario');
     }
 });
 
@@ -36,29 +37,35 @@ const createUser = asyncHandler(async (req,res) => {
 const loginUserCtrl=asyncHandler(async(req,res)=>{
     const {email, password}= req.body;
     // chequear si el usuario existe o no
-    const findUser = await User.findOne({email});
+    const findUser = await User.findOne({ email });
 
     if (findUser && (await findUser.isPasswordMatched(password))) {
+
         const refreshToken = await generateRefreshToken(findUser?._id);
-        const updateuser = await User.findByIdAndUpdate(findUser.id,
+
+        const updateuser = await User.findByIdAndUpdate(
+            findUser.id,
             {
                 refreshToken: refreshToken,
             },
             { new: true}
         );
-        res.cookie('refreshToken', refreshToken, {
+
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            maxAge: 72 * 60 * 60 * 1000,    
-        });
+            maxAge: 72 * 60 * 60 * 1000            
+          });
+       
         res.json({
             _id: findUser?._id,
             firstname:findUser?.firstname,
             email:findUser?.email,
-            token:generateToken(findUser?._id),
+            token: refreshToken,
         });
 
     } else {
-        throw new Error("Credenciales no existen o son incorrectas");
+        return res.sendStatus(401);
+        //throw new Error("Credenciales no existen o son incorrectas");
     }
 });
 
@@ -79,6 +86,7 @@ const loginAdmin = asyncHandler(async(req,res)=>{
         );
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
+            secure: true,
             maxAge: 72 * 60 * 60 * 1000,    
         });
         res.json({
